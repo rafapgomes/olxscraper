@@ -37,8 +37,11 @@ def getlink(anuncios_tratados):
     for anuncio in anuncios_tratados:
         titulo = gettitulo(anuncio)
         if comptitulo(titulo) == 0:
-            getpreco(anuncio)
-            print(anuncio.get('href'))
+            preco = convertepreco(getpreco(anuncio))
+            if preco<3.5:
+                print(anuncio.get('href'))
+                print(formata(preco))
+                
 
 def comptitulo(titulo):
     for nome in titulo:
@@ -53,8 +56,14 @@ def gettitulo(anuncio):
 def getpreco(anuncio):
     valor = anuncio.find(class_= preco)
     if len(valor.contents) != 0:
-        print(valor.contents[0])
+        return valor.contents[0].split()[1]
     
+
+def convertepreco(preco):
+    return float(preco)
+
+def formata(preco):
+    return format(preco, '.3f')
 
 getlink(trataanucio(lista_anuncios))
 
