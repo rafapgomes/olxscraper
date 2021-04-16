@@ -12,9 +12,7 @@ proxpage= 'sc-hmzhuo kJjuHR sc-jTzLTM iwtnNi'
 #sc-1bofr6e-1 iUNkan sc-ifAKCX bBbnjQ
 
 paginas = "sc-hmzhuo fFyjgz sc-jTzLTM iwtnNi"
-link = "https://www.olx.com.br/brasil?o=2&q=notebook%20ryzen%203"
 
-page = getpage.request(link)
 
 def getadlist(page):
      soup = BeautifulSoup(page.content, 'html.parser')
@@ -23,7 +21,6 @@ def getadlist(page):
      
      return lista_anuncios
 
-lista_anuncios = getadlist(page)
 
 def trataanucio(lista_anuncios):
     anuncios_tratados = []
@@ -72,25 +69,31 @@ def add_lista(lista_anuncios,anuncio,preco):
     
     lista_anuncios.append(gettitulo(anuncio))
     lista_anuncios.append(formata(preco))
+    lista_anuncios.append(getlocal(anuncio))
     lista_anuncios.append((anuncio.get('href')))
 
 def imprimelista(lista):
     for item in lista:
         print(item)
 
-
-
+def getlocal(anuncio):
+    localizacao = anuncio.find(class_  = local)
+    return localizacao.contents[0]
 
 def getanunc(anuncios_tratados):
     lista_anuncios = []
     for anuncio in anuncios_tratados:
         titulo = gettitulo(anuncio)
         titulo = comptitulo(titulo)
+        local = getlocal(anuncio)
         if titulo == 0:
             preco = getpreco(anuncio)
             preco = convertepreco(preco)
             if preco<3.5:
-               add_lista(lista_anuncios,anuncio,preco)    
+               lista_temp = []
+
+               add_lista(lista_temp,anuncio,preco)    
+               lista_anuncios.append(lista_temp)
     
     return lista_anuncios
 
@@ -118,4 +121,3 @@ def comppage(nome):
 
 
 
-getanunc(trataanucio((getadlist(page))))
