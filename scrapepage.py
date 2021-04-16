@@ -7,9 +7,14 @@ imagem = 'sc-1q8ortj-0 gIkEbD'
 lixo = 'fnmrjs-3 eJTbMD'
 lixo2 = 'h3us20-3 csYflq'
 
-proxpage = 'sc-1bofr6e-0 iRQkdN'
+proxpage= 'sc-hmzhuo kJjuHR sc-jTzLTM iwtnNi'
 
-page = getpage.request()
+#sc-1bofr6e-1 iUNkan sc-ifAKCX bBbnjQ
+
+paginas = "sc-hmzhuo fFyjgz sc-jTzLTM iwtnNi"
+link = "https://www.olx.com.br/brasil?o=2&q=notebook%20ryzen%203"
+
+page = getpage.request(link)
 
 def getadlist(page):
      soup = BeautifulSoup(page.content, 'html.parser')
@@ -33,30 +38,28 @@ def trataanucio(lista_anuncios):
         
     return anuncios_tratados
 
-def getlink(anuncios_tratados):
-    for anuncio in anuncios_tratados:
-        titulo = gettitulo(anuncio)
-        if comptitulo(titulo) == 0:
-            preco = convertepreco(getpreco(anuncio))
-            if preco<3.5:
-                print(anuncio.get('href'))
-                print(formata(preco))
-                
 
 def comptitulo(titulo):
+    titulo = split(titulo)
     for nome in titulo:
         if nome == 'NOTEBOOK':
            return 0
 
 def gettitulo(anuncio):
     titulo = anuncio.find('h2').contents[0]
-    titulo = titulo.upper().split()
+    titulo = titulo.upper()
     return titulo
+
+def split(string):
+   return string.split()
 
 def getpreco(anuncio):
     valor = anuncio.find(class_= preco)
     if len(valor.contents) != 0:
-        return valor.contents[0].split()[1]
+        string = split(valor.contents[0])
+        return string[1]
+    else:
+        return 0
     
 
 def convertepreco(preco):
@@ -65,7 +68,54 @@ def convertepreco(preco):
 def formata(preco):
     return format(preco, '.3f')
 
-getlink(trataanucio(lista_anuncios))
+def add_lista(lista_anuncios,anuncio,preco):
+    
+    lista_anuncios.append(gettitulo(anuncio))
+    lista_anuncios.append(formata(preco))
+    lista_anuncios.append((anuncio.get('href')))
+
+def imprimelista(lista):
+    for item in lista:
+        print(item)
 
 
 
+
+def getanunc(anuncios_tratados):
+    lista_anuncios = []
+    for anuncio in anuncios_tratados:
+        titulo = gettitulo(anuncio)
+        titulo = comptitulo(titulo)
+        if titulo == 0:
+            preco = getpreco(anuncio)
+            preco = convertepreco(preco)
+            if preco<3.5:
+               add_lista(lista_anuncios,anuncio,preco)    
+    
+    return lista_anuncios
+
+
+def listpage(page):
+    lista_page = []
+    soup = BeautifulSoup(page.content, 'html.parser')
+    link = soup.find_all(class_= "sc-1bofr6e-0 iRQkdN")
+    for item in link:
+         i = item.find(class_= "sc-1bofr6e-1 iUNkan sc-ifAKCX bBbnjQ")
+         i = i.contents[0].upper().split()
+         if comppage(i)==1:
+             return (item.get('href'))
+         
+    return 0
+    
+
+    
+
+
+def comppage(nome):
+        for string in nome:
+            if string == 'PRÓXIMA':
+                return 1
+
+
+
+getanunc(trataanucio((getadlist(page))))
