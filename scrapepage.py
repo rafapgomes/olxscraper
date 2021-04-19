@@ -36,10 +36,10 @@ def trataanucio(lista_anuncios):
     return anuncios_tratados
 
 
-def comptitulo(titulo):
+def comptitulo(titulo,namecomp):
     titulo = split(titulo)
     for nome in titulo:
-        if nome == 'NOTEBOOK':
+        if nome == namecomp:
            return 0
 
 def gettitulo(anuncio):
@@ -80,11 +80,11 @@ def getlocal(anuncio):
     localizacao = anuncio.find(class_  = local)
     return localizacao.contents[0]
 
-def getanunc(anuncios_tratados):
+def getanunc(anuncios_tratados,compname):
     lista_anuncios = []
     for anuncio in anuncios_tratados:
         titulo = gettitulo(anuncio)
-        titulo = comptitulo(titulo)
+        titulo = comptitulo(titulo,compname)
         local = getlocal(anuncio)
         if titulo == 0:
             preco = getpreco(anuncio)
