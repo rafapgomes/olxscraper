@@ -8,7 +8,8 @@ headers = {
 def request(link):
     return requests.get(link,headers=headers)
 
-
+def getlink(itemname):
+    return "https://www.olx.com.br/brasil?q=" + itemname
 
 
 
